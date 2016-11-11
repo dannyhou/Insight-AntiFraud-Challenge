@@ -8,7 +8,7 @@ accountMax = 0
 pastDF = pd.read_csv("digital-wallet-master/paymo_input/batch_payment.txt", delimiter=',', usecols=(1,2), lineterminator='\n')
 # Convert to list to save processing time
 pastList = pastDF.values.tolist()
-# Get the maximum index
+# Get the maximum index to generate transaction list
 accountMax = 0
 for row in pastList:
     if row[0] > accountMax:
@@ -27,12 +27,7 @@ for row in pastList:
         transactionList1[row[0]].append(row[1])
     if row[0] not in transactionList1[row[1]]:
         transactionList1[row[1]].append(row[0])
-# Generate csv file with transactionList1
-#myfile = open('transactionList1.txt', 'wb')
-#writer = csv.writer(myfile)
-#writer.writerow(transactionList1)
 
-# Build output list
 # Import csv file of future transactions
 futureDF = pd.read_csv("digital-wallet-master/paymo_input/stream_payment.txt", delimiter=',', usecols=(1,2), lineterminator='\n')
 # Convert to list to save processing time
@@ -55,11 +50,10 @@ with open('digital-wallet-master/paymo_output/output1.txt', 'wb') as out1:
         # Check if id1 is part of id2's list
         elif row[0] in transactionList1[row[1]]:
             writer.writerow(["trusted"])
-        # If no condition is true, then the transaction is
-        # automatically unverified
+        # If no condition is true, then the transaction is unverified
         else:
             writer.writerow(["unverified"])
-print('Feature 1 finished!')
+# Feature 1 finished
 
 # Write feature 2 output file
 with open('digital-wallet-master/paymo_output/output2.txt', 'wb') as out2:
@@ -85,10 +79,9 @@ with open('digital-wallet-master/paymo_output/output2.txt', 'wb') as out2:
         elif list(set(transactionList1[row[0]]) & set(transactionList1[row[1]])):
             writer.writerow(["trusted"])
         else:
-        # If no condition is true, then the transaction is
-        # automatically unverified
+        # If no condition is true, then the transaction is unverified
             writer.writerow(["unverified"])
-print('Feature 2 finished!')
+# Feature 2 finished
 
 # Write feature 3 output file
 # For feature 3, we will construct a new transaction list
@@ -130,7 +123,6 @@ with open('digital-wallet-master/paymo_output/output3.txt', 'wb') as out3:
         elif list(set(transactionList2[row[0]]) & set(transactionList2[row[1]])):
             writer.writerow(["trusted"])
         else:
-        # If no condition is true, then the transaction is
-        # automatically unverified
+        # If no condition is true, then the transaction is unverified
             writer.writerow(["unverified"])
-print('Feature 3 finished!')
+# Feature 3 finished
